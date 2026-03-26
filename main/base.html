@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add - Iris Project</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<nav>
+    <div class="logo" style="display: flex; align-items: center;">
+        <img src="{% static 'logo.jpg' %}" style="height: 50px; margin-right: 10px;">
+        <span style="font-size: 1.8rem; font-weight: bold; color: white; letter-spacing: 1px;">IrisAI</span>
+    </div>
+    <ul>
+        <li><a href="{% url 'list_view' %}">List</a></li>
+        <li><a href="{% url 'add_view' %}">Add Data</a></li>
+        <li><a href="{% url 'search_view' %}">Search</a></li>
+        <li><a href="{% url 'predict_view' %}">🤖 AI Prediction</a></li>
+        {% if user.is_authenticated %}
+            <li><span style="color:white; margin-right:10px;">Hello, {{ user.username }}</span></li>
+            <li><a href="{% url 'logout' %}" style="color: #e74c3c; border: 1px solid #e74c3c; padding: 5px 10px; border-radius: 4px;">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login_view' %}">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+<div class="container">
+    <div style="display: flex; gap: 40px; align-items: center; max-width: 1000px; margin: 40px auto;">
+     
+        <div style="flex: 1; display: flex; justify-content: center;">
+            <img src="{% static 'add.jpg' %}" alt="Add Data" style="max-width: 350px; width: 100%; height: auto; border-radius: 8px;">
+        </div>
+
+        <div style="flex: 1;">
+            <div class="form-wrapper">
+                <h2 class="form-title">➕ Add New Iris Data</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Sepal Length (cm)</label>
+                        <input type="number" step="0.1" name="sepal_length" class="form-control" placeholder="e.g. 5.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sepal Width (cm)</label>
+                        <input type="number" step="0.1" name="sepal_width" class="form-control" placeholder="e.g. 3.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Petal Length (cm)</label>
+                        <input type="number" step="0.1" name="petal_length" class="form-control" placeholder="e.g. 1.4" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Petal Width (cm)</label>
+                        <input type="number" step="0.1" name="petal_width" class="form-control" placeholder="e.g. 0.2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Species</label>
+                        <select name="species" class="form-control" required>
+                            <option value="">-- Select Species --</option>
+                            <option value="Setosa">Setosa</option>
+                            <option value="Versicolor">Versicolor</option>
+                            <option value="Virginica">Virginica</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">💾 Save Data</button>
+                </form>
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="{% url 'list_view' %}" style="color: #3498db; text-decoration: none;">← Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer>
+    <p>&copy; 2025 Iris Data Project</p>
+</footer>
+
+</body>
+</html>

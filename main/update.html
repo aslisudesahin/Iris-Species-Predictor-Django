@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Iris Project</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        /* center content vertically */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 140px); 
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        /* mobile responsiveness */
+        @media (max-width: 900px) {
+            .search-split-wrapper {
+                flex-direction: column !important;
+                gap: 30px !important;
+            }
+            .search-image-side img {
+                 max-width: 250px !important;
+            }
+            .form-wrapper {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo" style="display: flex; align-items: center;">
+            <img src="{% static 'logo.jpg' %}" style="height: 50px; margin-right: 10px;">
+            <span style="font-size: 1.8rem; font-weight: bold; color: white; letter-spacing: 1px;">IrisAI</span>
+        </div>
+        <ul>
+            <li><a href="{% url 'list_view' %}">List</a></li>
+            <li><a href="{% url 'add_view' %}">Add Data</a></li>
+            <li><a href="{% url 'search_view' %}">Search</a></li>
+            <li><a href="{% url 'predict_view' %}">🤖 AI Prediction</a></li>
+            
+            {% if user.is_authenticated %}
+                <li><span style="color:white; margin-right:10px;">Hello, {{ user.username }}</span></li>
+                <li><a href="{% url 'logout' %}" style="color: #e74c3c; border: 1px solid #e74c3c; padding: 5px 10px; border-radius: 4px;">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login_view' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container">
+        
+        <div class="search-split-wrapper" style="display: flex; align-items: flex-start; justify-content: center; gap: 50px; width: 100%; max-width: 1100px;">
+
+            <div class="search-image-side" style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                <img src="{% static 'search.png' %}" alt="Search Illustration" style="width: 100%; max-width: 450px; height: auto; object-fit: contain; filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.1)); margin-top: 20px;">
+            </div>
+
+            <div class="form-wrapper" style="flex: 1; width: 100%;"> 
+                <h2 class="form-title">Search the Dataset 🔍</h2>
+                <p style="text-align:center; margin-bottom:20px; color:#666;">
+                    Filter the Iris flowers by dimensions or species.
+                </p>
+            
+                <form action="" method="GET">
+                    
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Min. Sepal Length</label>
+                            <input type="number" step="0.1" name="min_sepal_len" class="form-control" placeholder="0.0">
+                        </div>
+                        
+                        <div class="form-group" style="flex:1;">
+                            <label>Max. Sepal Length</label>
+                            <input type="number" step="0.1" name="max_sepal_len" class="form-control" placeholder="10.0">
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                        <label>Species</label>
+                        <select name="species" class="form-control">
+                            <option value="">All Species</option>
+                            <option value="Setosa">Iris-setosa</option>
+                            <option value="Versicolor">Iris-versicolor</option>
+                            <option value="Virginica">Iris-virginica</option>
+                        </select>
+                    </div>
+            
+                    <button type="submit" class="btn" style="width: 100%;">Search Records</button>
+                </form>
+
+                <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <h3 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">Results</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Sepal L</th>
+                                    <th>Sepal W</th>
+                                    <th>Species</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plant in results %}
+                                <tr>
+                                    <td>{{ plant.id }}</td>
+                                    <td>{{ plant.sepal_length }}</td>
+                                    <td>{{ plant.sepal_width }}</td>
+                                    <td>{{ plant.species }}</td>
+                                    <td>
+                                        <a href="{% url 'update_view' plant.id %}" class="action-btn edit-btn">Edit</a>
+                                        
+                                        {% if user.is_staff %}
+                                            <a href="{% url 'delete_view' plant.id %}" class="action-btn delete-btn">Del</a>
+                                        {% endif %}
+                                        
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #777; padding: 20px;">
+                                        No records found matching your criteria.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div> 
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Iris Data Project</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Iris Project</title>
+    {% load static custom_filters %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <nav style="justify-content: center;">
+        <div class="logo" style="display: flex; align-items: center;">
+            <img src="{% static 'logo.jpg' %}" style="height: 50px; margin-right: 10px;">
+            <span style="font-size: 1.8rem; font-weight: bold; color: white; letter-spacing: 1px;">IrisAI</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div style="display: flex; gap: 40px; align-items: center; max-width: 1000px; margin: 40px auto;">
+           
+            <div style="flex: 1; display: flex; justify-content: center;">
+                <img src="{% static 'login.png' %}" alt="Register" style="max-width: 300px; width: 100%; height: auto;">
+            </div>
+
+            <div style="flex: 1;">
+                <div class="form-wrapper">
+                    <h2 class="form-title">📝 Create Account</h2>
+                    
+                    {% if form.errors %}
+                        <div style="color: red; margin-bottom: 10px;">
+                            <p>Please check the details below:</p>
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+
+                    <form action="" method="POST" novalidate>
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field|add_class:"form-control" }}
+                                {% if field.errors %}
+                                    <div style="color: red; font-size: 0.85rem; margin-top: 5px;">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if field.help_text %}
+                                    <small style="color: #666; display: block; margin-top: 5px;">{{ field.help_text|safe }}</small>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn" style="width: 100%;">Register</button>
+                    </form>
+
+                    <div class="form-footer">
+                        Already have an account? <a href="{% url 'login_view' %}">Log in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <footer>
+        <p>&copy; 2025 Iris Data Project</p>
+    </footer>
+
+</body>
+</html>

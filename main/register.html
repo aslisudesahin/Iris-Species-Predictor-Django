@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prediction - Iris Project</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<nav>
+    <div class="logo" style="display: flex; align-items: center;">
+        <img src="{% static 'logo.jpg' %}" style="height: 50px; margin-right: 10px;">
+        <span style="font-size: 1.8rem; font-weight: bold; color: white; letter-spacing: 1px;">IrisAI</span>
+    </div>
+    <ul>
+        <li><a href="{% url 'list_view' %}">List</a></li>
+        <li><a href="{% url 'add_view' %}">Add Data</a></li>
+        <li><a href="{% url 'search_view' %}">Search</a></li>
+        <li><a href="{% url 'predict_view' %}">🤖 AI Prediction</a></li>
+        {% if user.is_authenticated %}
+            <li><span style="color:white; margin-right:10px;">Hello, {{ user.username }}</span></li>
+            <li><a href="{% url 'logout' %}" style="color: #e74c3c; border: 1px solid #e74c3c; padding: 5px 10px; border-radius: 4px;">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login_view' %}">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+<div class="container">
+    <div style="display: flex; gap: 40px; align-items: center; max-width: 1000px; margin: 40px auto;">
+    
+        <div style="flex: 1; display: flex; justify-content: center;">
+            <img src="{% static 'ai.png' %}" alt="AI Prediction" style="max-width: 350px; width: 100%; height: auto; border-radius: 8px;">
+        </div>
+
+        <div style="flex: 1;">
+            <div class="form-wrapper">
+                <h2 class="form-title">🤖 AI Iris Prediction</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                    Enter the features of the Iris flower and let the AI model predict the species.
+                </p>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label>Sepal Length (cm)</label>
+                        <input type="number" step="0.1" name="sl" class="form-control" placeholder="e.g. 5.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sepal Width (cm)</label>
+                        <input type="number" step="0.1" name="sw" class="form-control" placeholder="e.g. 3.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Petal Length (cm)</label>
+                        <input type="number" step="0.1" name="pl" class="form-control" placeholder="e.g. 1.4" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Petal Width (cm)</label>
+                        <input type="number" step="0.1" name="pw" class="form-control" placeholder="e.g. 0.2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Algorithm</label>
+                        <select name="model_type" class="form-control" required>
+                            <option value="">-- Choose Algorithm --</option>
+                            <option value="dt">Decision Tree</option>
+                            <option value="knn">K-Nearest Neighbors (KNN)</option>
+                            <option value="svm">Support Vector Machine (SVM)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">🔮 Make Prediction</button>
+                </form>
+
+                {% if result %}
+                    <div style="margin-top: 30px; padding: 20px; background-color: #e8f8f5; border: 2px solid #2ecc71; border-radius: 8px;">
+                        <h3 style="text-align: center; color: #27ae60;">✅ Prediction Result</h3>
+                        <p style="text-align: center; font-size: 1.3rem; color: #27ae60; font-weight: bold;">{{ result }}</p>
+                    </div>
+                {% endif %}
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="{% url 'list_view' %}" style="color: #3498db; text-decoration: none;">← Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer>
+    <p>&copy; 2025 Iris Data Project</p>
+</footer>
+
+</body>
+</html>
