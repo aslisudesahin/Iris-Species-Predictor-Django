@@ -1,0 +1,27 @@
+from django.db import models
+
+#  extra model: location 
+class Location(models.Model):
+    region_name = models.CharField(max_length=100, verbose_name="Region Name")
+    city = models.CharField(max_length=50, verbose_name="City")
+    altitude = models.IntegerField(verbose_name="Altitude (m)")
+    climate_type = models.CharField(max_length=50, verbose_name="Climate Type")
+    recorded_date = models.DateField(auto_now_add=True, verbose_name="Recorded Date")
+
+    def __str__(self):
+        return f"{self.region_name} - {self.city}"
+
+# main model: iris plant 
+class IrisPlant(models.Model):
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, verbose_name="Location", null=True, blank=True)
+    
+    sepal_length = models.FloatField(verbose_name="Sepal Length")
+    sepal_width = models.FloatField(verbose_name="Sepal Width")
+    petal_length = models.FloatField(verbose_name="Petal Length")
+    petal_width = models.FloatField(verbose_name="Petal Width")
+    species = models.CharField(max_length=50, verbose_name="Species") 
+    
+    created_at = models.DateTimeField(auto_now_add=True) 
+
+    def __str__(self):
+        return f"{self.species} ({self.sepal_length}, {self.sepal_width})"
